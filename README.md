@@ -5,8 +5,8 @@
 <?php
 
 $sPlaintext = "Hello Wrold!";
-$sMethod = 'AES-256-CFB8';
-$sPassword = "password";
+$sMethod    = 'AES-256-CFB8';
+$sPassword  = "password";
 
 $sPassword = substr(hash('sha256', $sPassword, true), 0, 32);
 

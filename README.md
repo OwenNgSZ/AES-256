@@ -25,6 +25,12 @@ echo 'decrypted to: ' . $sPlaintext . "\n";
 
 ```
 
+```
+plaintext is: Hello Wrold!
+encrypted to: uXcxRQdC2WxPCaEQ
+decrypted to: Hello Wrold!
+```
+
 ## JAVA
 ``` java
 import java.util.Base64;
@@ -104,6 +110,11 @@ public class main {
     }
 
 }
+```
+
+```
+sCiphertext : uXcxRQdC2WxPCaEQ
+sPlaintext  : Hello Wrold!
 ```
 
 

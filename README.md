@@ -117,5 +117,80 @@ sCiphertext : uXcxRQdC2WxPCaEQ
 sPlaintext  : Hello Wrold!
 ```
 
+## C#
+```
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
+namespace aesApp {
 
+    class Program {
+
+        static byte[] iv = {
+            0x16, 0x61, 0x0F, 0x3A, 0x37, 0x3D, 0x1B, 0x51,
+            0x4A, 0x39, 0x5A, 0x79, 0x29, 0x08, 0x01, 0x22
+        };
+
+        static void Main(string[] args) {
+
+            string message = "Hello Wrold!";
+            string password = "password";
+
+            SHA256 mySHA256 = SHA256Managed.Create();
+            byte[] key = mySHA256.ComputeHash(Encoding.ASCII.GetBytes(password));
+
+            string ciphertext = Encrypt(message, key);
+            Console.WriteLine("ciphertext : " + ciphertext);
+
+            string plaintext = Decrypt(ciphertext, key);
+            Console.WriteLine("plaintext  : " + plaintext);
+
+        }
+
+        public static string Encrypt (string plainText, byte[] key) {
+
+            Byte[] toEncryptArray = Encoding.ASCII.GetBytes(plainText);
+
+            System.Security.Cryptography.RijndaelManaged rm = new System.Security.Cryptography.RijndaelManaged {
+                Key = key,
+                Mode = System.Security.Cryptography.CipherMode.CFB,
+                Padding = System.Security.Cryptography.PaddingMode.None,
+                IV = iv,
+                FeedbackSize = 8,
+                BlockSize = 128
+            };
+
+            System.Security.Cryptography.ICryptoTransform cTransform = rm.CreateEncryptor();
+            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        }
+
+        public static string Decrypt (string cipherText, byte[] key) {
+
+            Byte[] toEncryptArray = Convert.FromBase64String(cipherText);
+
+            System.Security.Cryptography.RijndaelManaged rm = new System.Security.Cryptography.RijndaelManaged {
+                Key = key,
+                Mode = System.Security.Cryptography.CipherMode.CFB,
+                Padding = System.Security.Cryptography.PaddingMode.None,
+                IV = iv,
+                FeedbackSize = 8
+            };
+
+            System.Security.Cryptography.ICryptoTransform cTransform = rm.CreateDecryptor();
+            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+
+            return Encoding.ASCII.GetString(resultArray);
+        }
+    }
+}
+
+```
+
+```
+ciphertext : uXcxRQdC2WxPCaEQ
+plaintext  : Hello Wrold!
+```

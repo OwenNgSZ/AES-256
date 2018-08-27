@@ -18,4 +18,9 @@ $sCiphertext = base64_encode(openssl_encrypt($sPlaintext, $sMethod, $sPassword, 
 
 // decryption
 $sPlaintext = openssl_decrypt(base64_decode($sCiphertext), $sMethod, $sPassword, OPENSSL_RAW_DATA, $iv);
+
+echo 'plaintext is: ' . $sPlaintext . "\n";
+echo 'encrypted to: ' . $sCiphertext . "\n";
+echo 'decrypted to: ' . $sPlaintext . "\n";
+
 ```

@@ -42,7 +42,7 @@ public class EncryptUtils {
     
     private static final String CIPHER_ALGORITHM = "AES/CFB8/NOPADDING";
 
-    private static byte[] iv_net = {
+    private static byte[] IV = {
         0x16, 0x61, 0x0F, 0x3A, 0x37, 0x3D, 0x1B, 0x51,
         0x4A, 0x39, 0x5A, 0x79, 0x29, 0x08, 0x01, 0x22
     };
@@ -55,7 +55,7 @@ public class EncryptUtils {
         try {
             final Key keySpec = createKey(key.getBytes("UTF-8"));
             final Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv_net));
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(IV));
             final byte[] encoded = cipher.doFinal(data.getBytes("UTF-8"));
             return new String(Base64.getEncoder().encode(encoded));
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class EncryptUtils {
         try {
             final Key keySpec = createKey(key.getBytes("UTF-8"));
             final Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv_net));
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(IV));
             final byte[] bytes = Base64.getDecoder().decode(data);
             return new String(cipher.doFinal(bytes));
         } catch (Exception e) {
@@ -86,5 +86,25 @@ public class EncryptUtils {
 }
 
 ```
+
+``` java
+import java.io.*;
+
+public class main {
+    
+    public static void main(String []args) {
+
+        String sPassword = "password";
+
+        String sCiphertext = EncryptUtils.encryptAES(sPassword, "Hello Wrold!");
+    	System.out.println("sCiphertext : " + sCiphertext);
+
+    	String sPlaintext = EncryptUtils.decryptAES(sPassword, sCiphertext);
+    	System.out.println("sPlaintext  : " + sPlaintext);
+    }
+
+}
+```
+
 
 
